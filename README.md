@@ -22,6 +22,18 @@ Large-scale boards will be simulated many times to understand how performance va
 * high-speed array indexing for multi-dimensional arrays
 * CPU and GPU programming in python (using [theano][theano]), [torch][torch] and other languages
 
+### Components
+
+* Python server with HTTP front end for clients to connect
+    * automatically generate new board starts
+    * Data logging/storage for the game moves to replay and understand game progression
+* Web browser visualization for the current board or for multiple game runs
+    * AJAX enabled
+    * could try protobuf.js
+* Clients that implement game rules and provide the server with new moves
+    * written using a variety of languages and libraries
+
+
 
 [ohhi]: http://0hh1.com/
 [ohhi-github]: https://github.com/Q42/0hh1
