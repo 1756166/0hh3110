@@ -8,6 +8,25 @@ The [0h h1 game][ohhi] ([github][ohhi-github]) is a logic game to place two colo
 
 0h h3110 is developed as a client-server model, so that multiple clients can place the color pieces on the board.  
 
+### Design
+A server will host the game and accept TCP client connections.  Multiple clients will connect and the servers and clients will communicate using [protobufs][protobuf].  Each client may only make one move at a time, and for each move the server will retransmit the updated board to all clients.
+
+To begin the development, clients will only be programmed to look for one of the logic rules.  Clients will be run on multiple computers (say, the jetsons and laptops) to see how fast a board can be solved.
+
+Large-scale boards will be simulated many times to understand how performance varies with different types of clients, for higher-dimensional boards (3D, 4D, and higher).  Additional game rules can be applied.
+
+### Key concepts to explore
+
+* large-scale simulations and the Monte Carlo method
+* efficient network communication
+* high-speed array indexing for multi-dimensional arrays
+* CPU and GPU programming in python (using [theano][theano]), [torch][torch] and other languages
+
 
 [ohhi]: http://0hh1.com/
 [ohhi-github]: https://github.com/Q42/0hh1
+
+[protobuf]: https://developers.google.com/protocol-buffers/docs/overview
+[theano]: http://deeplearning.net/software/theano/
+[torch]: http://torch.ch/
+
