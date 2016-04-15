@@ -46,13 +46,8 @@ class Field:
             elif value == array[index+2] and array[index+1]=='0':
                 self.mark_field(location, index+1, other(value), is_row)
                 
-    def all_rows_full(self):
+    def done(self):
         for i, v in enumerate(self.rows):
-            if self.is_full(v):
-                continue
-            
-    def all_columns_full(self):
-        for i,v in enumerate(self.columns):
             if self.is_full(v):
                 continue
             
@@ -62,7 +57,7 @@ class Field:
                 print j,
             print "\n"
             
-    def display_field_columns(self):
+    def display_field_columns(self): #Basically for testing purposes only
         for i in self.columns:
             for j in i:
                 print j,
@@ -70,10 +65,32 @@ class Field:
             
     def reset_columns(self):
         self.columns = [list(i) for i in zip(*zip(*zip(*self.rows[::-1])[::-1])[::-1])]
+        
+    def check_num(self, array, index, is_row):
+        if self.is_full(array):
+            return "done"
+        elif array.count('1') == len(array)/2: #len(array) should always be even so I don't have to check integer division
+            for i, v in enumerate(array):
+                if v == '0':
+                    self.mark_field(index, i, '2', is_row)
+        elif array.count('2') == len(array)/2:
+            for i, v in enumerate(array):
+                if v == '0':
+                    self.mark_field(index, i, '1', is_row)
+                    
+    def all_row_num(self):
+        for i, v in enumerate(self.rows):
+            self.check_num(v, i, True)
+            
+    def all_column_num(self):
+        for i, v in enumerate(self.columns):
+            self.check_num(v, i, False)
+        
 def other(value):
     if value == '1':
         return '2'
     return '1'
+    
                     
 field = '''
 0 0 0 0 0 2 0 0 0 0 0 0
@@ -90,3 +107,11 @@ field = '''
 1 0 0 0 0 0 0 2 2 0 0 0'''.split('\n')
 field = [i.split() for i in field[1:]]
 field = Field(field)
+field.display_field_rows()
+for i in range(10):
+    field.all_row_threes()
+    field.all_column_threes()
+    field.all_row_num()
+    field.all_column_num()
+print "========================"
+field.display_field_rows()
