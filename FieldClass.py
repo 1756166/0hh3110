@@ -46,7 +46,7 @@ class Field:
             self.mark_field(location, array.index(('1'*to_check)+'0')+len(('1'*to_check)+'0')-1, '2', is_row)
         if ('2'*to_check)+'0' in array:
             self.mark_field(location, array.index(('2'*to_check)+'0')+len(('2'*to_check)+'0')-1, '1', is_row)
-        if '101' in array:
+        if '101' in array: #TODO: Get this to work for different contraints (to_check being different values)
             self.mark_field(location, array.index('101')+1, '2', is_row)
         if '202' in array:
             self.mark_field(location, array.index('202')+1, '1', is_row)
