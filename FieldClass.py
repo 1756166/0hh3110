@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from PIL import Image
+import vision
 class Field:
     def __init__(self, rows):
         self.rows = rows
@@ -37,8 +37,20 @@ class Field:
         for i, v in enumerate(self.columns):
             self.check_threes(v, i, False)
                  
-    def check_threes(self, array, location, is_row):
-        for index, value in enumerate(array[:-2]):
+    def check_threes(self, array, location, is_row, to_check=2):
+        if '0'+('1'*to_check) in array:
+            self.mark_field(location, array.index('0'+('1'*to_check)), '2', is_row)
+        if '0'+('2'*to_check) in array:
+            self.mark_field(location, array.index('0'+('1'*to_check)), '1', is_row)
+        if ('1'*to_check)+'0' in array:
+            self.mark_field(location, array.index(('1'*to_check)+'0')+len(('1'*to_check)+'0')-1, '2', is_row)
+        if ('2'*to_check)+'0' in array:
+            self.mark_field(location, array.index(('2'*to_check)+'0')+len(('2'*to_check)+'0')-1, '1', is_row)
+        if '101' in array:
+            self.mark_field(location, array.index('101')+1, '2', is_row)
+        if '202' in array:
+            self.mark_field(location, array.index('202')+1, '1', is_row)
+        '''for index, value in enumerate(array[:-2]):
             if value == '0':
                 if index == 9:
                     if array[index+1]==array[index+2] and array[index+1] != '0': #Very edge case
@@ -55,7 +67,7 @@ class Field:
                     if array[index-1] == '0':
                         self.mark_field(location, index-1, other(value), is_row)
             elif value == array[index+2] and array[index+1]=='0':
-                self.mark_field(location, index+1, other(value), is_row)
+                self.mark_field(location, index+1, other(value), is_row)'''
                 
     def done(self):
         for i, v in enumerate(self.rows):
@@ -99,8 +111,8 @@ class Field:
             
     def is_same(self, array1, array2, is_row, index1, index2):
         same = 0
-        array1 = field[index1, is_row] #Double check that they're the right values
-        array2 = field[index2, is_row]
+        #array1 = self.__getitem__(index1, is_row) #Double check that they're the right values
+        #array2 = self.__getitem__(index2, is_row)
         for i in range(len(array1)):
             if array1[i]!=array2[i] and array1[i]!='0' and array2[i]!='0': #not the same
                 return 'nope'
@@ -133,6 +145,10 @@ class Field:
                 return True
         return False
         
+    def display_for_javascript(self):
+        for row in self.rows:
+            print str(row) + ','
+        
 def other(value):
     if value == '1':
         return '2'
@@ -159,38 +175,13 @@ def loop(field):
             if index1 == index2:
                 continue
             field.is_same(array1, array2, False, index1, index2)
-            
-                    
-size = 12 #If you want to do a different sized board, you'll have to change this. I'm also not sure if the first and last coordinates are still the same
-          #But the algorithm in the coordinates list comprehension should still work pretty well
-first = [680, 260]
-last = [1260, 830]
-BLUE = [[53, 184, 213], [48, 167, 194]] #Color image for vision "processing", for whatever reason there are two of each color
-RED =  [[213, 83, 54], [194, 75, 49]]
-BLACK = [[42, 42, 42]]
-coordinates = [[680+((last[0]-first[0])/11)*i, 260+((last[1]-first[1])/11)*j] for j in range(12) for i in range(12)] #For reading the picture
-im = Image.open("board.png")
-picture = im.load()
-board = [['0','0','0','0','0','0','0','0','0','0','0','0'],['0','0','0','0','0','0','0','0','0','0','0','0'],\
-['0','0','0','0','0','0','0','0','0','0','0','0'],['0','0','0','0','0','0','0','0','0','0','0','0'],\
-['0','0','0','0','0','0','0','0','0','0','0','0'],['0','0','0','0','0','0','0','0','0','0','0','0'],\
-['0','0','0','0','0','0','0','0','0','0','0','0'],['0','0','0','0','0','0','0','0','0','0','0','0'],\
-['0','0','0','0','0','0','0','0','0','0','0','0'],['0','0','0','0','0','0','0','0','0','0','0','0'],\
-['0','0','0','0','0','0','0','0','0','0','0','0'],['0','0','0','0','0','0','0','0','0','0','0','0']] #I'm sorry
-for index, coordinate in enumerate(coordinates):
-    color = list(picture[coordinate[0], coordinate[1]])
-    first_index = index/12 #which row
-    second_index = index%12 #which column
-    if color in BLUE:
-        board[first_index][second_index] = '2'
-    elif color in RED:
-        board[first_index][second_index] = '1'
-    elif color in BLACK:
-        board[first_index][second_index] = '0'
-    else:
-        print "NO" #Literally shouldn't happen
-field = Field(board)
 
-for i in range(4): #Number randomly chosen by me
-    loop(field)
-field.display_field_rows()
+def do():
+    field = Field(vision.get_coords())
+    for i in range(4): #Number randomly chosen by me
+        loop(field)
+    field.display_field_rows()
+    return field
+board = do()
+
+board.display_for_javascript()
