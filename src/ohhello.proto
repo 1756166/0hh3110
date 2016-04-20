@@ -1,0 +1,35 @@
+package ohhello;
+
+enum PieceValue {
+  UNSET = 0;
+  RED = 1;
+  BLUE = 2;
+}
+
+enum PieceRule {
+  UNLOCKED = 0;
+  LOCKED = 1;
+}
+
+message PieceRules {
+  required uint32 pieceIndex = 2;
+  repeated PieceRule currentRule = 3;
+}
+
+message Piece {
+  required uint32 pieceIndex = 2;
+  required PieceValue currentValue = 3;
+}
+
+message Field {
+  required uint32 gameID = 1;
+  required uint32 numberOfDimensions = 2;
+  repeated uint32 dimensionLengths = 3 [packed = true];
+  repeated Piece field = 10;
+  repeated PieceRules fieldRules = 20;
+}
+
+message Move {
+  required uint32 gameID = 1;
+  required Piece change = 5;
+}
