@@ -43,18 +43,6 @@ class Field:
                 self.mark_field(location, array.index(i*'1'+'0'+(to_check-i)*'1')+i, '2', is_row)
             if i*'2'+'0'+(to_check-i)*'2' in array:
                 self.mark_field(location, array.index(i*'2'+'0'+(to_check-i)*'2')+i, '1', is_row)
-        '''if '0'+('1'*to_check) in array:
-            self.mark_field(location, array.index('0'+('1'*to_check)), '2', is_row)
-        if '0'+('2'*to_check) in array:
-            self.mark_field(location, array.index('0'+('1'*to_check)), '1', is_row)
-        if ('1'*to_check)+'0' in array:
-            self.mark_field(location, array.index(('1'*to_check)+'0')+len(('1'*to_check)+'0')-1, '2', is_row)
-        if ('2'*to_check)+'0' in array:
-            self.mark_field(location, array.index(('2'*to_check)+'0')+len(('2'*to_check)+'0')-1, '1', is_row)
-        if '101' in array: #TODO: Get this to work for different contraints (to_check being different values)
-            self.mark_field(location, array.index('101')+1, '2', is_row)
-        if '202' in array:
-            self.mark_field(location, array.index('202')+1, '1', is_row)'''
         '''for index, value in enumerate(array[:-2]):
             if value == '0':
                 if index == 9:
